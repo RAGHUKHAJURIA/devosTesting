@@ -1,5 +1,17 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "schedule": ["at any time"],
   "automerge": true,
   "automergeType": "pr",
-  "requiredStatusChecks": ["security-check"]
+  "automergeStrategy": "squash",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    }
+  ]
 }
