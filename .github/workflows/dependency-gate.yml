@@ -8,22 +8,55 @@ on:
       - 'server/package-lock.json'
 
 jobs:
-  enforce-and-merge:
+  snyk-security-scan:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: server
 
     steps:
-      - name: Wait for Snyk check
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --file=server/package.json --severity-threshold=high
+
+  auto-merge-renovate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: snyk-security-scan  # Only runs if Snyk passes
+    if: github.actor == 'renovate[bot]'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Wait for Snyk scan to complete
         uses: lewagon/wait-on-check-action@v1.3.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          check-name: "security/snyk"
+          check-name: 'snyk-security-scan'   # Must exactly match the job name above
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
 
       - name: Auto merge Renovate PR if safe
         if: success() && github.actor == 'renovate[bot]'
-        uses: pascalgn/automerge-action@v0.16.4
+        uses: pascalgn/automerge-action@v0.16.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_METHOD: squash
