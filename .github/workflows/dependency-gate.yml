@@ -38,21 +38,16 @@ jobs:
 
   auto-merge-renovate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: snyk-security-scan  # Only runs if Snyk passes
-    if: github.actor == 'renovate[bot]'
+    timeout-minutes: 5
+    needs: snyk-security-scan
+    # Only auto merge patch/minor from Renovate — major needs manual review
+    if: |
+      github.actor == 'renovate[bot]' &&
+      !contains(github.event.pull_request.labels.*.name, 'major-update')
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Wait for Snyk scan to complete
-        uses: lewagon/wait-on-check-action@v1.3.1
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          check-name: 'snyk-security-scan'   # Must exactly match the job name above
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
 
       - name: Auto merge Renovate PR
         uses: pascalgn/automerge-action@v0.16.3
