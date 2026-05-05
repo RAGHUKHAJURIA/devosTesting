@@ -1,0 +1,39 @@
+name: Dependency Security Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'DecentraWork/package.json'
+      - 'DecentraWork/package-lock.json'
+
+  push:
+    branches:
+      - '**'
+    paths:
+      - 'DecentraWork/package.json'
+      - 'DecentraWork/package-lock.json'
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./DecentraWork
+
+      - name: Run Snyk Security Scan
+        uses: snyk/actions/node@master
+        with:
+          args: test --severity-threshold=high --file=DecentraWork/package.json
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

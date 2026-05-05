@@ -1,0 +1,17 @@
+{
+  "name": "blog-app-server",
+  "version": "1.0.0",
+  "description": "Blog App Express API Server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": ["blog", "api", "express", "mongodb"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
