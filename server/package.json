@@ -8,10 +8,19 @@
     "dev": "nodemon index.js",
     "test": "echo \"No tests yet\" && exit 0"
   },
-  "keywords": ["blog", "api", "express", "mongodb"],
+  "keywords": [
+    "blog",
+    "api",
+    "express",
+    "mongodb"
+  ],
   "author": "",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "nodemon": "^3.1.14"
   }
 }
