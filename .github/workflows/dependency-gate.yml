@@ -7,33 +7,23 @@ on:
       - 'server/package.json'
       - 'server/package-lock.json'
 
-  push:
-    branches:
-      - '**'
-    paths:
-      - 'server/package.json'
-      - 'server/package-lock.json'
-
 jobs:
-  security-check:
+  enforce-and-merge:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Wait for Snyk check
+        uses: lewagon/wait-on-check-action@v1.3.1
         with:
-          node-version: 20
+          ref: ${{ github.event.pull_request.head.sha }}
+          check-name: "security/snyk"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
 
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./server
-
-      - name: Run Snyk Security Scan
-        uses: snyk/actions/node@master
-        with:
-          args: test --severity-threshold=high --file=server/package.json
+      - name: Auto merge Renovate PR if safe
+        if: success() && github.actor == 'renovate[bot]'
+        uses: pascalgn/automerge-action@v0.16.3
         env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: squash
