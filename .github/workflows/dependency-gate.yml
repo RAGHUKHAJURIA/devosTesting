@@ -7,6 +7,10 @@ on:
       - 'server/package.json'
       - 'server/package-lock.json'
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   snyk-security-scan:
     runs-on: ubuntu-latest
