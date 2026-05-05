@@ -40,17 +40,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: snyk-security-scan
-    # Only auto merge patch/minor from Renovate — major needs manual review
     if: |
-      github.actor == 'renovate[bot]' &&
+      (github.actor == 'renovate[bot]' || github.actor == 'renovate') &&
       !contains(github.event.pull_request.labels.*.name, 'major-update')
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Auto merge Renovate PR
-        uses: pascalgn/automerge-action@v0.16.3
+      - name: Enable GitHub native auto-merge
+        run: |
+          gh pr merge "${{ github.event.pull_request.number }}" \
+            --squash \
+            --auto \
+            --delete-branch
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_METHOD: squash
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

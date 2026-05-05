@@ -2,33 +2,23 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
   "dependencyDashboard": true,
-  "dependencyDashboardAutoclose": true,
   "schedule": ["at any time"],
   "prCreation": "immediate",
-  "separateMajorMinor": true,
-  "ignorePaths": ["**/node_modules/**"],
   "includePaths": ["server/**"],
-
   "packageRules": [
     {
-      "description": "Auto merge safe updates",
+      "description": "Auto merge patch and minor updates",
       "matchUpdateTypes": ["patch", "minor"],
       "automerge": true,
       "automergeType": "pr",
-      "automergeStrategy": "squash"
+      "automergeStrategy": "squash",
+      "labels": ["dependencies"]
     },
     {
-      "description": "Never auto merge major updates - require manual review",
+      "description": "Major updates need manual review",
       "matchUpdateTypes": ["major"],
       "automerge": false,
       "labels": ["major-update", "needs-review"]
-    },
-    {
-      "description": "Flag security updates as urgent",
-      "matchCategories": ["security"],
-      "labels": ["security"],
-      "prPriority": 10,
-      "automerge": false
     }
   ]
 }
