@@ -11,8 +11,13 @@ const uploadRoutes = require('./routes/upload');
 const errorHandler = require('./middleware/errorHandler');
 const Blog = require('./models/Blog');
 
-const app = express();
+const app = require("./app");
+
 const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 // ── Connect to MongoDB ────────────────────────────────────────────────────────
 connectDB();

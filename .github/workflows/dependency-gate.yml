@@ -12,9 +12,11 @@ permissions:
   pull-requests: write
 
 jobs:
+
   snyk-security-scan:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+
     defaults:
       run:
         working-directory: server
@@ -40,10 +42,49 @@ jobs:
         with:
           args: --file=server/package.json --severity-threshold=high
 
+  confidence-suite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    needs: snyk-security-scan
+
+    defaults:
+      run:
+        working-directory: server
+
+    services:
+      mongodb:
+        image: mongo:6
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run confidence suite tests
+        run: npm test
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://localhost:27017/testdb
+          PORT: 5001
+
   auto-merge-renovate:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: snyk-security-scan
+
+    needs: [snyk-security-scan, confidence-suite]
+
     if: |
       (github.actor == 'renovate[bot]' || github.actor == 'renovate') &&
       !contains(github.event.pull_request.labels.*.name, 'major-update')
