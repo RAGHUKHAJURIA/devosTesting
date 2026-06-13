@@ -9,6 +9,10 @@ on:
 
 permissions:
   contents: write
+permissions:
+  contents: read
+  actions: read
+  # Add only the permissions your workflow actually needs
   pull-requests: write
 
 jobs:
