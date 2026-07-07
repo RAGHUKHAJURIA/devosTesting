@@ -1,6 +1,6 @@
 # CI/CD Reliability Scan Findings & Patches
 
-This document outlines the results of the CI/CD reliability scan with ID `9f1e9348-80d1-4c81-b46b-ebeb1bdb798f`.
+This document outlines the results of the CI/CD reliability scan with ID `2c50c027-ea1d-4857-aafd-67482958b6f1`.
 
 ## 🔧 Automatically Applied Fixes
 
@@ -13,8 +13,8 @@ The following issues were corrected automatically in this branch:
 The following issues cannot be automatically resolved safely and require manual intervention:
 
 ### 1. Rule: `security-unpinned-action` in `.github/workflows/dependency-gate.yml`
-- **Guidance**: ⚠️ MANUAL REVIEW REQUIRED:
-Unpinned actions can be silently updated to include malicious code, compromising your entire CI pipeline.
+- **Guidance**: uses: Unpinned actions can be silently updated to include malicious code, compromising your entire CI pipeline.@{REPLACE_WITH_SHA}  # was: unknown
+# Find SHA: https://github.com/Unpinned actions can be silently updated to include malicious code, compromising your entire CI pipeline./commits/unknown
 
 **Current Code:**
 ```yaml
