@@ -8,26 +8,31 @@
     "dev": "nodemon index.js",
     "test": "echo \"No tests yet\" && exit 0"
   },
-  "keywords": ["blog", "api", "express", "mongodb"],
+  "keywords": [
+    "blog",
+    "api",
+    "express",
+    "mongodb"
+  ],
   "author": "",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "lodash": "4.17.21",
-    "multer": "2.0.0",
-    "qs": "6.13.0",
-    "form-data": "4.0.0",
-    "uuid": "9.0.0",
+    "cors": "2.8.5",
     "dayjs": "1.11.9",
     "dotenv": "16.0.0",
     "express": "4.21.2",
-    "cors": "2.8.5",
-    "helmet": "7.0.0",
-    "morgan": "1.10.0",
     "express-rate-limit": "7.0.0",
+    "form-data": "4.0.0",
+    "helmet": "7.0.0",
+    "lodash": "4.17.21",
     "mongoose": "8.0.0",
-    "rss": "1.11.0"
+    "morgan": "1.10.0",
+    "multer": "2.0.0",
+    "qs": "6.13.0",
+    "rss": "^1.2.2",
+    "uuid": "9.0.0"
   }
 }
