@@ -1,7 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
-  "dependencyDashboard": true,
+  "extends": ["config:recommended"],
+  "dependencyDashboard": {
+    "enabled": true
+  },
   "schedule": ["at any time"],
   "prCreation": "immediate",
   "includePaths": ["server/**"],
